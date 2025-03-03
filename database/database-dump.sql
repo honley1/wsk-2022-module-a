@@ -1,0 +1,63 @@
+CREATE DATABASE IF NOT EXISTS test;
+USE test;
+
+CREATE TABLE IF NOT EXISTS admin_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP NULL
+);
+
+CREATE TABLE IF NOT EXISTS platform_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP NULL,
+    is_blocked BOOLEAN DEFAULT FALSE,
+    block_reason VARCHAR(255) NULL
+);
+
+CREATE TABLE IF NOT EXISTS games (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    thumbnail VARCHAR(255) NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    author_id INT NOT NULL,
+
+    FOREIGN KEY (author_id) REFERENCES platform_users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS game_versions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    game_id INT NOT NULL,
+    version INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    path_to_files VARCHAR(255) NOT NULL,
+    thumbnail_path VARCHAR(255) NULL,
+
+    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS game_scores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    game_version_id INT NOT NULL,
+    score INT CHECK (score BETWEEN -2147483648 AND 2147483647),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES platform_users(id) ON DELETE CASCADE,
+    FOREIGN KEY (game_version_id) REFERENCES game_versions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS api_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    user_id INT NOT NULL UNIQUE,
+
+    FOREIGN KEY (user_id) REFERENCES platform_users(id) ON DELETE CASCADE
+);

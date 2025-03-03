@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="/styles/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <div class="welcome">
+            <h1>Welcome, <%= admin.username %> 👋</h1>
+        </div>
+
+        <div class="message">
+            <p><b>Welcome to the Admin Dashboard! Here, you can manage users, games, and game scores on the platform.</p>
+        </div>
+
+        <div class="card-list">
+            <div class="user-item">
+                <p class="title">Users</p>
+                <h2 class="info"><%= users_count %></h2>
+            </div>
+
+            <div class="games-item">
+                <p class="title">Games</p>
+                <h2 class="info"><%= games_count %></h2>
+            </div>
+
+            <div class="versions-item">
+                <p class="title">Game versions</p>
+                <h2 class="info"><%= game_versions_count %></h2>
+            </div>
+
+            <div class="scores-item">
+                <p class="title">Total scores</p>
+                <h2 class="info"><%= scores_count %></h2>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header')  %>
+    <link rel="stylesheet" href="/styles/unblockUser.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Unblock user</h1>
+        <form method="POST" action="/admin/users/<%= username %>/unblock">
+            <p>Are you sure you want to unblock this user?</p>
+            <button type="submit">Unblock</button>
+            <a href="/admin/users">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

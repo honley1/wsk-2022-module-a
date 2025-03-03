@@ -1,0 +1,42 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    width: 80%;
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
+.welcome {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.message {
+    text-align: center; 
+    margin-top: 20px;
+}
+
+.card-list {
+    margin-top: 80px;
+    display: flex;
+    gap: 50px;
+}
+
+.user-item, .games-item, .versions-item, .scores-item {
+    display: grid;
+    border: 1px solid #7b7b7b;
+    border-radius: 16px;
+    padding: 35px 35px;
+    width: 320px;
+    gap: 15px;
+    box-shadow: #909090 8px 8px 10px;
+}
+
+.title {
+    color: #808080;
+}

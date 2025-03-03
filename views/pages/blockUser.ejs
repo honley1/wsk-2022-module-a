@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header')  %>
+    <link rel="stylesheet" href="/styles/blockUser.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Block user</h1>
+        <p>Are you sure you want to block this user?</p>
+
+        <form method="POST" action="/admin/users/<%= username %>/block">
+            <label for="reason"></label>
+            <select name="reason" id="reason">
+                <option value="You have been blocked by an administrator">Blocked by administrator</option>
+                <option value="You have been blocked for spamming">Spamming</option>
+                <option value="You have been blocked for cheating">Cheating</option>
+            </select>
+
+            <button type="submit">Block</button>
+            <a href="/admin/users">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 80%;
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
+table td {
+    padding: 10px 15px;
+    text-align: center;
+}
+
+table th, table tr td {
+    border: 1px solid #909090;
+    padding: 10px 25px;
+}
+
+table {
+    border-collapse: collapse;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 50px;
+}

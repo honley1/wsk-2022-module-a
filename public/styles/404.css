@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.not-found {
+    margin-top: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.container {
+    width: 80%;
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
+p {
+    font-size: 36px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(0, 70, 155);
+}

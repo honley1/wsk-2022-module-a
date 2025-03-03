@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="/styles/user.css">
+</head>
+<body>
+    <div class="user-container">
+
+        <% if (error) {%>
+            <p><%= error %></p>    
+        <% } %>
+
+        <h1>ID: <%= user.id %></td>  
+        <h2>Username: <%= user.username %></h2>
+        <h2>Registered at: <%= new Date(user.registered_at).toLocaleDateString('ru-RU') %></h2>
+        <h2>Last login at: <%= user.last_login_at %></h2>  
+        <h2>Is blocked: <%= user.is_blocked === 0 ? 'No' : 'Yes' %></h2>
+        <h2>Block reason: <%= user.block_reason %></h2>
+
+        <form method="GET" action="/admin/users/<%= user.username %>/block">
+            <button type="submit">Block</button>
+        </form>
+
+        <form method="GET" action="/admin/users/<%= user.username %>/unblock">
+            <button type="submit">Unblock</button>
+        </form>
+    </div>
+</body>
+</html>
