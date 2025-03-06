@@ -14,6 +14,7 @@ const authenticate = async (req, res, next) => {
     
         jwt.verify(token, SECRET_KEY, (err, user) => {
             if (err) return res.status(401).json({ status: "unauthenticated", message: 'Invalid token' });
+            if (user.is_blocked) return res.status(403).json({status: "blocked", message: "User blocked", reason: "You have been blocked by an administrator"});
             req.user = user;
             next();
         });

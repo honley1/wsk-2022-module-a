@@ -212,7 +212,7 @@ router.put('/:slug', async (req, res) => {
     }
 });
 
-router.delete('/api/v1/games/:slug', async (req, res) => {
+router.delete('/:slug', async (req, res) => {
     let conn;
     try {
         const { slug } = req.params;
@@ -232,6 +232,41 @@ router.delete('/api/v1/games/:slug', async (req, res) => {
 
         await conn.execute('DELETE FROM games WHERE slug = ?', [slug]);
         res.status(204).send();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
+router.get('/:slug/scores', async (req, res) => {
+    let conn;
+    try {
+        const { slug } = req.params;
+
+        const db = req.db;
+
+        conn = await db.getConnection();
+
+        const [games] = await conn.execute('SELECT * FROM games WHERE slug = ?', [slug]);
+
+        if (games.length === 0) {
+            return res.status(400).json({ message: "game not found" });
+        }
+
+        const game = games[0];
+
+        const [game_versions] = await conn.execute('SELECT * FROM game_versions WHERE game_id = ?', [game.id]);
+
+        let scoreResult = [];
+
+        for (const game_version of game_versions) {
+            const [scores] = await conn.execute('SELECT * FROM game_scores WHERE game_version_id = ?', [game_version.id]);
+            scoreResult = scoreResult.concat(scores);
+        }
+
+        return res.status(200).json({ scores: scoreResult });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error" });

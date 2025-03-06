@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
             [username, hashedPassword]
         );
 
-        const token = jwt.sign({ id: result.insertId, username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: result.insertId, username: username, is_blocked: false }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
         await conn.execute('INSERT INTO api_tokens (token, user_id) VALUES (?, ?)', [token, result.insertId]);
 
@@ -60,7 +60,7 @@ router.post('/signin', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, username: user.username, is_blocked: user.is_blocked }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
         await conn.execute('INSERT INTO api_tokens (token, user_id) VALUES (?, ?)', [token, user.id]);
         await conn.execute('UPDATE platform_users SET last_login_at = NOW() WHERE id = ?', [user.id]);
