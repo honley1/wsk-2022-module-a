@@ -17,6 +17,11 @@ router.post('/signup', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const [existingUsers] = await conn.execute('SELECT * FROM platform_users WHERE username = ?', [username]);
+        if (existingUsers.length >= 1) {
+            return res.status(409).json({ status: "invalid", message: "User already exists" });
+        }
+
         const [result] = await conn.execute(
             'INSERT INTO platform_users (username, password) VALUES(?, ?)',
             [username, hashedPassword]
@@ -39,7 +44,7 @@ router.post('/signin', async (req, res) => {
     let conn;
     try {
         const { username, password } = req.body;
-        if (!username || !password || username.length < 4 || username.length > 60 || password.length < 6) {
+        if (!username || !password || username.length   < 4 || username.length > 60 || password.length < 6) {
             return res.status(401).json({ status: "invalid", message: "Wrong username or password" });
         }
 
@@ -51,16 +56,22 @@ router.post('/signin', async (req, res) => {
         const user = users[0];
 
         if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ status: "invalid", message: 'Invalid credentials' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ status: "invalid", message: 'Invalid credentials' });
         }
 
         const token = jwt.sign({ id: user.id, username: user.username, is_blocked: user.is_blocked }, process.env.SECRET_KEY, { expiresIn: '1h' });
+
+        const [existingTokens] = await conn.execute('SELECT * FROM api_tokens WHERE user_id = ?', [user.id]);
+
+        if (existingTokens.length > 0) {
+            await conn.execute('DELETE FROM api_tokens WHERE user_id = ?', [user.id]);
+        }
 
         await conn.execute('INSERT INTO api_tokens (token, user_id) VALUES (?, ?)', [token, user.id]);
         await conn.execute('UPDATE platform_users SET last_login_at = NOW() WHERE id = ?', [user.id]);
